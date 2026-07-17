@@ -1,0 +1,65 @@
+/* Design tokens from Claude Design — "Planbase Design System" */
+:root {
+  --teal-50: #ecfdf7; --teal-100: #d1faec; --teal-200: #a3f3da; --teal-300: #68e4c3; --teal-400: #34cda8;
+  --teal-500: #0fb28c; --teal-600: #0a8f70; --teal-700: #0a715a; --teal-800: #0b5a48; --teal-900: #0a4a3c;
+  --lime-400: #c3f53d; --lime-500: #a6e619; --lime-600: #84bd0e;
+  --amber-400: #ffc247; --amber-500: #ffa714; --amber-600: #e0870a;
+  --coral-400: #ff8a73; --coral-500: #ff6647; --coral-600: #e8492a;
+  --sky-400: #63d3ff; --sky-500: #2cb8f0;
+  --ink-950: #0b0e10; --ink-900: #15181c; --ink-700: #3a3f45; --ink-500: #686f78;
+  --ink-300: #a2a8b0; --ink-200: #c8ccd1; --ink-100: #e5e7ea; --ink-50: #f4f5f6;
+  --white: #ffffff;
+
+  --text-primary: var(--ink-950);
+  --text-secondary: var(--ink-500);
+  --text-inverse: var(--white);
+  --text-on-accent: var(--white);
+
+  --surface-page: #f9faf9;
+  --surface-card: var(--white);
+  --surface-sunken: var(--ink-50);
+  --surface-inverse: var(--ink-950);
+
+  --border-subtle: var(--ink-100);
+  --border-default: var(--ink-200);
+  --border-strong: var(--ink-700);
+
+  --accent-primary: var(--teal-500);
+  --accent-primary-hover: var(--teal-600);
+  --accent-primary-active: var(--teal-700);
+  --accent-primary-soft: var(--teal-50);
+
+  --status-todo: var(--ink-300);
+  --status-todo-bg: var(--ink-50);
+  --status-progress: var(--amber-500);
+  --status-progress-bg: #fff4e0;
+  --status-done: #4fae2e;
+  --status-done-bg: #eafce0;
+
+  --focus-ring: var(--teal-400);
+  --shadow-color: 220 20% 30%;
+
+  --font-display: 'Source Sans 3', system-ui, sans-serif;
+  --font-body: 'Manrope', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Consolas, monospace;
+
+  --text-display-xl: 64px; --text-display-l: 44px; --text-display-m: 32px; --text-display-s: 24px;
+  --text-body-l: 19px; --text-body-m: 16px; --text-body-s: 14px; --text-body-xs: 12px;
+  --leading-tight: 1.1; --leading-snug: 1.3; --leading-normal: 1.55;
+  --tracking-tight: -0.02em; --tracking-normal: 0;
+  --weight-regular: 400; --weight-medium: 500; --weight-semibold: 600; --weight-bold: 700;
+
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px;
+  --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px; --space-20: 80px; --space-24: 96px;
+  --radius-s: 8px; --radius-m: 12px; --radius-l: 16px; --radius-xl: 24px; --radius-pill: 999px;
+
+  --shadow-xs: 0 1px 2px hsl(var(--shadow-color) / 0.06);
+  --shadow-s: 0 2px 6px hsl(var(--shadow-color) / 0.08);
+  --shadow-m: 0 8px 24px hsl(var(--shadow-color) / 0.10);
+  --shadow-l: 0 20px 48px hsl(var(--shadow-color) / 0.14);
+
+  --ease-standard: cubic-bezier(.4, 0, .2, 1);
+  --ease-out: cubic-bezier(0, 0, .2, 1);
+  --duration-fast: 120ms;
+  --duration-normal: 200ms;
+}
