@@ -27,14 +27,14 @@ function App() {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch("http://localhost:3000/api/planner", {
+            const res = await fetch("/api/planner", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ goal })
             });
             const data = await res.json();
             setTasks(parsePlan(data.result));
-        } catch (err) {
+        } catch {
             setError("Couldn't create a plan for that goal. Please try again.");
         } finally {
             setLoading(false);
@@ -71,7 +71,7 @@ function App() {
         setRevising(true);
         setError(null);
         try {
-            const res = await fetch("http://localhost:3000/api/revise", {
+            const res = await fetch("/api/revise", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ goal, tasks, instruction })

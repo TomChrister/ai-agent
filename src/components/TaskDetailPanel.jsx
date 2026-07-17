@@ -11,18 +11,13 @@ const STATUSES = [
 
 /** TaskDetailPanel: side panel with description, subtasks, status control, editing, and delete. */
 function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }) {
+    // State initializes from `task`; the parent passes key={task.id} so the panel
+    // remounts (and resets) when a different task is opened.
     const [isEditing, setIsEditing] = useState(false);
-    const [draftTitle, setDraftTitle] = useState("");
-    const [draftDescription, setDraftDescription] = useState("");
+    const [draftTitle, setDraftTitle] = useState(task?.title ?? "");
+    const [draftDescription, setDraftDescription] = useState(task?.description ?? "");
     const [confirmingDelete, setConfirmingDelete] = useState(false);
     const panelRef = useRef(null);
-
-    useEffect(() => {
-        setIsEditing(false);
-        setConfirmingDelete(false);
-        setDraftTitle(task?.title ?? "");
-        setDraftDescription(task?.description ?? "");
-    }, [task]);
 
     useEffect(() => {
         if (!task) return;

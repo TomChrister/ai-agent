@@ -6,6 +6,7 @@
  * This file is a snapshot for reference only — the app's actual landing
  * page lives in src/components/ as Tailwind-based JSX wired to real state.
  */
+import React from 'react';
 
 function TopBar() {
   return React.createElement('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 32px', borderBottom: '1px solid var(--border-subtle)' } },

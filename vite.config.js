@@ -7,4 +7,11 @@ export default defineConfig({
         react(),
         tailwindcss()
     ],
+    // Local dev only: forward /api/* to the Express server (server.js) on :3000.
+    // In production on Vercel, /api/* is served by the serverless functions in api/.
+    server: {
+        proxy: {
+            '/api': 'http://localhost:3000',
+        },
+    },
 })

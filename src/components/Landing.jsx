@@ -59,6 +59,7 @@ function Landing({
             )}
 
             <TaskDetailPanel
+                key={active?.id}
                 task={active}
                 onClose={() => setActive(null)}
                 onMove={onMoveTask}
