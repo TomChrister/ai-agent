@@ -30,11 +30,11 @@ function PlanningLoader() {
                 {STATUS_MESSAGES[step]}
             </div>
 
-            <div className="flex w-full max-w-4xl gap-5 px-6">
+            <div className="flex w-full max-w-4xl flex-col gap-4 md:flex-row md:gap-5 md:px-6">
                 {[0, 1, 2].map((col) => (
                     <div
                         key={col}
-                        className="flex min-w-50 flex-1 flex-col gap-3 rounded-2xl bg-(--surface-sunken) p-4"
+                        className="flex flex-col gap-3 rounded-2xl bg-(--surface-sunken) p-4 md:min-w-50 md:flex-1"
                     >
                         <div className="h-3 w-20 animate-pulse rounded bg-(--border-default)" />
                         {[0, 1].map((row) => (

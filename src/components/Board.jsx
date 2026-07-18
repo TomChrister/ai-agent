@@ -1,5 +1,4 @@
-import { useState } from "react";
-import Tabs from "./ui/navigation/Tabs";
+import { useEffect, useRef, useState } from "react";
 import KanbanColumn from "./ui/kanban/KanbanColumn";
 import TaskCard from "./ui/kanban/TaskCard";
 import Button from "./ui/core/Button";
@@ -29,7 +28,34 @@ function Board({
     onApplyRevision,
     onDiscardRevision,
 }) {
-    const [view, setView] = useState("Board");
+    // Per-column collapse state (only takes effect below `md`; desktop always shows).
+    // To Do starts open, the others collapsed.
+    const [collapsed, setCollapsed] = useState({ todo: false, progress: true, done: true });
+
+    const counts = COLUMNS.reduce((acc, col) => {
+        acc[col.key] = tasks.filter((t) => t.col === col.key).length;
+        return acc;
+    }, {});
+
+    // Auto-expand a column when a new card lands in it.
+    const prevCounts = useRef(counts);
+    useEffect(() => {
+        setCollapsed((prev) => {
+            let changed = false;
+            const next = { ...prev };
+            for (const col of COLUMNS) {
+                if (counts[col.key] > (prevCounts.current[col.key] ?? 0) && next[col.key]) {
+                    next[col.key] = false;
+                    changed = true;
+                }
+            }
+            return changed ? next : prev;
+        });
+        prevCounts.current = counts;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [counts.todo, counts.progress, counts.done]);
+
+    const toggleColumn = (key) => setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
 
     return (
         <div className="flex flex-1 flex-col">
@@ -50,7 +76,6 @@ function Board({
                     >
                         Reset
                     </Button>
-                    <Tabs items={["Board", "List", "Timeline"]} active={view} onChange={setView} />
                 </div>
             </div>
 
@@ -68,35 +93,31 @@ function Board({
                 onDiscard={onDiscardRevision}
             />
 
-            {view === "Board" ? (
-                <div className="flex flex-1 gap-5 overflow-x-auto p-8">
-                    {COLUMNS.map((col) => (
-                        <KanbanColumn
-                            key={col.key}
-                            title={col.title}
-                            count={tasks.filter((t) => t.col === col.key).length}
-                            tone={col.tone}
-                        >
-                            {tasks
-                                .filter((t) => t.col === col.key)
-                                .map((task) => (
-                                    <TaskCard
-                                        key={task.id}
-                                        title={task.title}
-                                        statusTone={col.tone}
-                                        statusLabel={col.title}
-                                        onClick={() => onCardClick(task)}
-                                    />
-                                ))}
-                            {col.key === "todo" && <AddTaskForm onAdd={onAddTask} />}
-                        </KanbanColumn>
-                    ))}
-                </div>
-            ) : (
-                <div className="flex flex-1 items-center justify-center text-(--text-secondary)">
-                    {view} view is coming soon.
-                </div>
-            )}
+            <div className="flex flex-1 flex-col gap-4 p-4 md:flex-row md:gap-5 md:overflow-x-auto md:p-8">
+                {COLUMNS.map((col) => (
+                    <KanbanColumn
+                        key={col.key}
+                        title={col.title}
+                        count={counts[col.key]}
+                        tone={col.tone}
+                        collapsed={collapsed[col.key]}
+                        onToggle={() => toggleColumn(col.key)}
+                    >
+                        {tasks
+                            .filter((t) => t.col === col.key)
+                            .map((task) => (
+                                <TaskCard
+                                    key={task.id}
+                                    title={task.title}
+                                    statusTone={col.tone}
+                                    statusLabel={col.title}
+                                    onClick={() => onCardClick(task)}
+                                />
+                            ))}
+                        {col.key === "todo" && <AddTaskForm onAdd={onAddTask} />}
+                    </KanbanColumn>
+                ))}
+            </div>
         </div>
     );
 }
