@@ -46,6 +46,7 @@ function Landing({
                     goal={goal}
                     tasks={tasks}
                     onCardClick={setActive}
+                    onMoveTask={onMoveTask}
                     onReset={onReset}
                     onAddTask={onAddTask}
                     onRevise={onRevise}

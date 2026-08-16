@@ -2,7 +2,8 @@
 
 Give Planbase a goal and a **Planner Agent** (powered by Claude) breaks it down into
 concrete, self-contained subtasks. The tasks appear as cards on a kanban board
-(**To Do / In Progress / Done**), where you can move, edit, add, and delete them — or
+(**To Do / In Progress / Done**), where you can drag them between columns, edit, add,
+and delete them — or
 ask a **Revise Agent** to reshape the plan in natural language ("add two tasks about
 music", "remove the budget task").
 
@@ -34,9 +35,9 @@ to `localStorage` so a plan survives page reloads.
 3. The **Planner Agent** returns JSON describing up to 5 subtasks. `parsePlan.js`
    turns that into task cards, all starting in **To Do**.
 4. Cards render on the **kanban board**. You can:
-   - Click a card to open its detail panel (edit / delete).
+   - **Drag and drop** a card into another column to change its status.
+   - Click a card to open its detail panel (edit / delete / move).
    - Add a new task via the form in the To Do column.
-   - Move cards between columns.
 5. **Revise the plan**: type an instruction in the revise bar → `/api/revise`.
    The **Revise Agent** returns a minimal set of `add` / `update` / `remove` changes,
    shown in a preview dialog before you **Apply** or **Discard** them. Limited to
@@ -142,7 +143,7 @@ ai-agent/
     ├── App.jsx              # Top-level state, plan/revise logic, localStorage
     ├── components/
     │   ├── Landing.jsx          # Goal input → board switch
-    │   ├── Board.jsx            # Kanban board (responsive, collapsible columns)
+    │   ├── Board.jsx            # Kanban board (drag & drop, collapsible columns)
     │   ├── PlanningLoader.jsx   # Loading state while planning
     │   ├── ReviseBar.jsx        # Natural-language revise input
     │   ├── RevisePreviewDialog.jsx
@@ -156,6 +157,22 @@ ai-agent/
     │   └── planStorage.js       # localStorage save/load/clear
     └── styles/tokens.css        # Design tokens (colors, surfaces, status)
 ```
+
+---
+
+## Drag and drop
+
+Task cards can be dragged between the three columns; dropping a card calls the same
+`onMoveTask` handler in `App.jsx` that the detail panel uses, so the new column is
+persisted to `localStorage` immediately.
+
+- Built on the **native HTML5 drag-and-drop API** — no extra dependency.
+- The card being dragged dims; the column under the cursor gets a dashed outline.
+- Dragging over a **collapsed** column expands it so the drop lands somewhere visible.
+- A hint (*"Drag and drop tasks between columns"*) sits above the board, below the
+  revise bar.
+- Because HTML5 drag events don't fire on touch devices, dragging (and the hint) are
+  **desktop only** (`≥ md`); on phones, move a task from its detail panel instead.
 
 ---
 
