@@ -18,6 +18,7 @@ function Board({
     goal,
     tasks,
     onCardClick,
+    onMoveTask,
     onReset,
     onAddTask,
     onRevise,
@@ -57,6 +58,46 @@ function Board({
 
     const toggleColumn = (key) => setCollapsed((prev) => ({ ...prev, [key]: !prev[key] }));
 
+    // Drag-and-drop: `draggingId` is the card being carried, `dragOverCol` the
+    // column currently under the cursor (drives the drop highlight).
+    const [draggingId, setDraggingId] = useState(null);
+    const [dragOverCol, setDragOverCol] = useState(null);
+
+    function handleDragStart(e, task) {
+        setDraggingId(task.id);
+        e.dataTransfer.effectAllowed = "move";
+        // Some browsers require data to be set for the drag to start at all.
+        e.dataTransfer.setData("text/plain", String(task.id));
+    }
+
+    function handleDragEnd() {
+        setDraggingId(null);
+        setDragOverCol(null);
+    }
+
+    function handleDragOver(e, key) {
+        if (draggingId === null) return;
+        e.preventDefault(); // marks the column as a valid drop target
+        e.dataTransfer.dropEffect = "move";
+        setDragOverCol(key);
+        // Reveal a collapsed column so the drop lands somewhere visible.
+        if (collapsed[key]) setCollapsed((prev) => ({ ...prev, [key]: false }));
+    }
+
+    function handleDragLeave(e, key) {
+        // Ignore moves between children of the same column.
+        if (e.currentTarget.contains(e.relatedTarget)) return;
+        setDragOverCol((prev) => (prev === key ? null : prev));
+    }
+
+    function handleDrop(e, key) {
+        e.preventDefault();
+        const id = draggingId ?? Number(e.dataTransfer.getData("text/plain"));
+        const task = tasks.find((t) => t.id === id);
+        if (task && task.col !== key) onMoveTask(id, key);
+        handleDragEnd();
+    }
+
     return (
         <div className="flex flex-1 flex-col">
             <div className="flex items-center justify-between px-8 pt-5">
@@ -93,7 +134,13 @@ function Board({
                 onDiscard={onDiscardRevision}
             />
 
-            <div className="flex flex-1 flex-col gap-4 p-4 md:flex-row md:gap-5 md:overflow-x-auto md:p-8">
+            {/* Drag hint — desktop only, since HTML5 drag doesn't fire on touch. */}
+            <span className="hidden items-center gap-1.5 px-4 text-sm text-(--text-secondary) md:flex md:px-8">
+                <Icon name="grip-vertical" size={14} />
+                Drag and drop tasks between columns
+            </span>
+
+            <div className="flex flex-1 flex-col gap-4 p-4 pt-3 md:flex-row md:gap-5 md:overflow-x-auto md:p-8 md:pt-4">
                 {COLUMNS.map((col) => (
                     <KanbanColumn
                         key={col.key}
@@ -102,6 +149,10 @@ function Board({
                         tone={col.tone}
                         collapsed={collapsed[col.key]}
                         onToggle={() => toggleColumn(col.key)}
+                        dropActive={dragOverCol === col.key}
+                        onDragOver={(e) => handleDragOver(e, col.key)}
+                        onDragLeave={(e) => handleDragLeave(e, col.key)}
+                        onDrop={(e) => handleDrop(e, col.key)}
                     >
                         {tasks
                             .filter((t) => t.col === col.key)
@@ -112,6 +163,10 @@ function Board({
                                     statusTone={col.tone}
                                     statusLabel={col.title}
                                     onClick={() => onCardClick(task)}
+                                    draggable
+                                    dragging={draggingId === task.id}
+                                    onDragStart={(e) => handleDragStart(e, task)}
+                                    onDragEnd={handleDragEnd}
                                 />
                             ))}
                         {col.key === "todo" && <AddTaskForm onAdd={onAddTask} />}

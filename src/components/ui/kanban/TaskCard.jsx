@@ -4,12 +4,30 @@ const STATUS_STYLES = {
     done: "bg-(--status-done-bg) text-[#2c6b18]",
 };
 
-/** TaskCard: single kanban task card — title, tags, status, avatar initial. */
-function TaskCard({ title, tags = [], statusTone = "neutral", statusLabel = "To Do", assignee, onClick }) {
+/** TaskCard: single kanban task card — title, tags, status, avatar initial.
+ *  Draggable between columns when `draggable` is set; `dragging` dims the card
+ *  that is currently being carried. */
+function TaskCard({
+    title,
+    tags = [],
+    statusTone = "neutral",
+    statusLabel = "To Do",
+    assignee,
+    onClick,
+    draggable = false,
+    dragging = false,
+    onDragStart,
+    onDragEnd,
+}) {
     return (
         <div
             onClick={onClick}
-            className="flex cursor-pointer flex-col gap-2.5 rounded-xl border border-(--border-subtle) bg-(--surface-card) p-4 shadow-(--shadow-xs) transition duration-200 hover:-translate-y-0.5 hover:shadow-(--shadow-m)"
+            draggable={draggable}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            className={`flex flex-col gap-2.5 rounded-xl border border-(--border-subtle) bg-(--surface-card) p-4 shadow-(--shadow-xs) transition duration-200 hover:-translate-y-0.5 hover:shadow-(--shadow-m) ${
+                draggable ? "cursor-grab active:cursor-grabbing" : "cursor-pointer"
+            } ${dragging ? "opacity-40" : ""}`}
         >
             <div className="text-sm font-semibold leading-snug text-(--text-primary)">{title}</div>
 
