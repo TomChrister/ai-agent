@@ -13,15 +13,15 @@ music", "remove the budget task").
 
 | Layer      | Technology |
 |------------|------------|
-| Frontend   | React 19 + Vite 8 |
+| Frontend   | React 19 + TypeScript + Vite 8 |
 | Styling    | Tailwind CSS 4 (via `@tailwindcss/vite`) + CSS design tokens (`src/styles/tokens.css`) |
 | AI         | [Anthropic Claude](https://www.anthropic.com) via `@anthropic-ai/sdk` (model `claude-sonnet-4-6`) |
-| Backend (local) | Express 5 (`server.js`) |
+| Backend (local) | Express 5 (`server.ts`) |
 | Backend (production) | Vercel serverless functions (`api/`) |
-| State      | React state + `localStorage` persistence (`src/lib/planStorage.js`) |
+| State      | React state + `localStorage` persistence (`src/lib/planStorage.ts`) |
 | Linting    | ESLint 10 |
 
-There is **no separate state library** — plan state lives in `App.jsx` and is persisted
+There is **no separate state library** — plan state lives in `App.tsx` and is persisted
 to `localStorage` so a plan survives page reloads.
 
 ---
@@ -32,7 +32,7 @@ to `localStorage` so a plan survives page reloads.
 1. **Enter a goal** on the landing screen (e.g. "Plan a small launch event").
 2. The frontend `POST`s the goal to `/api/planner`. While it waits, a responsive
    `PlanningLoader` shows a rotating status + skeleton board.
-3. The **Planner Agent** returns JSON describing up to 5 subtasks. `parsePlan.js`
+3. The **Planner Agent** returns JSON describing up to 5 subtasks. `parsePlan.ts`
    turns that into task cards, all starting in **To Do**.
 4. Cards render on the **kanban board**. You can:
    - **Drag and drop** a card into another column to change its status.
@@ -59,10 +59,10 @@ consistent structure).
 ### Frontend ↔ backend wiring
 The frontend always calls **relative** paths (`/api/planner`, `/api/revise`):
 
-- **In local dev**, `vite.config.js` proxies `/api/*` → the Express server on
-  `http://localhost:3000` (`server.js`).
+- **In local dev**, `vite.config.ts` proxies `/api/*` → the Express server on
+  `http://localhost:3000` (`server.ts`).
 - **In production on Vercel**, `/api/*` is served by the serverless functions in
-  `api/planner.js` and `api/revise.js`.
+  `api/planner.ts` and `api/revise.ts`.
 
 The two implementations share the same prompts and behavior; keep them in sync when
 you change agent logic.
@@ -135,12 +135,12 @@ ai-agent/
 ├── api/                     # Vercel serverless functions (production backend)
 │   ├── planner.js           #   POST /api/planner  → Planner Agent
 │   └── revise.js            #   POST /api/revise   → Revise Agent
-├── server.js                # Express server (local dev backend, port 3000)
-├── vite.config.js           # Vite + React + Tailwind; /api proxy for dev
+├── server.ts                # Express server (local dev backend, port 3000)
+├── vite.config.ts           # Vite + React + Tailwind; /api proxy for dev
 ├── index.html               # App shell + favicons
 ├── public/                  # Static assets served from / (favicons, manifest)
 └── src/
-    ├── App.jsx              # Top-level state, plan/revise logic, localStorage
+    ├── App.tsx              # Top-level state, plan/revise logic, localStorage
     ├── components/
     │   ├── Landing.jsx          # Goal input → board switch
     │   ├── Board.jsx            # Kanban board (drag & drop, collapsible columns)
@@ -151,10 +151,10 @@ ai-agent/
     │   ├── AddTaskForm.jsx
     │   └── ui/                  # Reusable UI primitives (core, forms, kanban, …)
     ├── lib/
-    │   ├── parsePlan.js         # Planner JSON → task cards
+    │   ├── parsePlan.ts         # Planner JSON → task cards
     │   ├── parseRevision.js     # Revise JSON → change set
     │   ├── applyRevision.js     # Apply add/update/remove to tasks
-    │   └── planStorage.js       # localStorage save/load/clear
+    │   └── planStorage.ts       # localStorage save/load/clear
     └── styles/tokens.css        # Design tokens (colors, surfaces, status)
 ```
 
@@ -163,7 +163,7 @@ ai-agent/
 ## Drag and drop
 
 Task cards can be dragged between the three columns; dropping a card calls the same
-`onMoveTask` handler in `App.jsx` that the detail panel uses, so the new column is
+`onMoveTask` handler in `App.tsx` that the detail panel uses, so the new column is
 persisted to `localStorage` immediately.
 
 - Built on the **native HTML5 drag-and-drop API** — no extra dependency.
