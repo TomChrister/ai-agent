@@ -1,5 +1,7 @@
 # Planbase — AI Task Orchestrator
 
+[![CI](https://github.com/TomChrister/ai-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/TomChrister/ai-agent/actions/workflows/ci.yml)
+
 Give Planbase a goal and a **Planner Agent** (powered by Claude) breaks it down into
 concrete, self-contained subtasks. The tasks appear as cards on a kanban board
 (**To Do / In Progress / Done**), where you can drag them between columns, edit, add,
@@ -125,6 +127,15 @@ npm run dev
 | `npm run build`    | Production build to `dist/` |
 | `npm run preview`  | Preview the production build locally |
 | `npm run lint`     | Run ESLint |
+| `npm test`         | Run the test suite (Vitest) |
+
+---
+
+## Continuous integration
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint, build, and tests on
+every pull request targeting `main`. A branch ruleset on `main` blocks merging until
+CI passes.
 
 ---
 
