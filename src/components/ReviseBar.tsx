@@ -25,6 +25,7 @@ function ReviseBar({ onSubmit, loading, revisionsUsed, revisionsMax }: ReviseBar
         <div className="flex items-center gap-2 px-8 py-5">
             <input
                 value={value}
+                maxLength={500}
                 onChange={(e) => setValue(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
                 disabled={limitReached}

@@ -7,19 +7,17 @@ const DOT_STYLES = {
     done: "bg-(--status-done)",
 };
 
-type Tone = keyof typeof DOT_STYLES;
-
 interface KanbanColumnProps {
     title: ReactNode;
     count: number;
-    tone?: Tone;
-    collapsed?: boolean;
-    onToggle?: () => void;
-    children?: ReactNode;
-    dropActive?: boolean;
-    onDragOver?: DragEventHandler<HTMLDivElement>;
-    onDragLeave?: DragEventHandler<HTMLDivElement>;
-    onDrop?: DragEventHandler<HTMLDivElement>;
+    tone: keyof typeof DOT_STYLES;
+    collapsed: boolean;
+    onToggle: () => void;
+    children: ReactNode;
+    dropActive: boolean;
+    onDragOver: DragEventHandler<HTMLDivElement>;
+    onDragLeave: DragEventHandler<HTMLDivElement>;
+    onDrop: DragEventHandler<HTMLDivElement>;
 }
 
 /** KanbanColumn: board column with header, count, and stacked TaskCards.
@@ -29,11 +27,11 @@ interface KanbanColumnProps {
 function KanbanColumn({
     title,
     count,
-    tone = "neutral",
-    collapsed = false,
+    tone,
+    collapsed,
     onToggle,
     children,
-    dropActive = false,
+    dropActive,
     onDragOver,
     onDragLeave,
     onDrop,
@@ -53,7 +51,7 @@ function KanbanColumn({
                 aria-expanded={!collapsed}
                 className="flex items-center gap-2 text-left md:pointer-events-none md:cursor-default"
             >
-                <span className={`h-2 w-2 rounded-full ${DOT_STYLES[tone] || DOT_STYLES.neutral}`} />
+                <span className={`h-2 w-2 rounded-full ${DOT_STYLES[tone]}`} />
                 <span className="text-sm font-semibold text-(--text-primary)">{title}</span>
                 <span className="text-xs font-semibold text-(--text-secondary)">{count}</span>
                 <Icon

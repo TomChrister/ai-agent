@@ -34,6 +34,7 @@ function App() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ goal })
             });
+            if (!res.ok) throw new Error("request-failed");
             const data = await res.json();
             setTasks(parsePlan(data.result));
         } catch {
@@ -49,11 +50,7 @@ function App() {
     }
 
     function handleAddTask(title: string, description: string) {
-        setTasks((ts) => {
-            if (!ts) return ts;
-            const nextId = ts.length ? Math.max(...ts.map((t) => t.id)) + 1 : 1;
-            return [...ts, { id: nextId, title, description, col: "todo" as const }];
-        });
+        setTasks((ts) => (ts ? applyRevision(ts, { add: [{ title, description }], update: [], remove: [] }) : ts));
     }
 
     function handleEditTask(id: number, updates: Omit<TaskUpdate, "id">) {
@@ -79,7 +76,12 @@ function App() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ goal, tasks, instruction })
             });
-            if (!res.ok) throw new Error("request-failed");
+            if (!res.ok) {
+                // A 400 explains itself (e.g. plan too big); other failures may not return JSON.
+                const body = await res.json().catch(() => null);
+                setError(body?.error ?? "Couldn't reach the Planner Agent. Please try again.");
+                return;
+            }
             const data = await res.json();
             const revision = parseRevision(data.result);
             setPendingRevision(revision);

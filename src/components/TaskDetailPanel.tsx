@@ -18,7 +18,7 @@ interface TaskDetailPanelProps {
     onDelete: (id: number) => void;
 }
 
-/** TaskDetailPanel: side panel with description, subtasks, status control, editing, and delete. */
+/** TaskDetailPanel: side panel with description, status control, editing, and delete. */
 function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetailPanelProps) {
     // State initializes from `task`; the parent passes key={task.id} so the panel
     // remounts (and resets) when a different task is opened.
@@ -66,6 +66,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                     <input
                         autoFocus
                         value={draftTitle}
+                        maxLength={500}
                         onChange={(e) => setDraftTitle(e.target.value)}
                         className="flex-1 rounded-lg border border-(--border-default) px-2.5 py-1.5 text-lg font-semibold text-(--text-primary) outline-none focus:border-(--focus-ring)"
                     />
@@ -105,6 +106,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                 <textarea
                     autoFocus={false}
                     value={draftDescription}
+                    maxLength={500}
                     onChange={(e) => setDraftDescription(e.target.value)}
                     placeholder="Description"
                     rows={4}
@@ -130,30 +132,6 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                     >
                         Save
                     </button>
-                </div>
-            )}
-
-            {task.subtasks && task.subtasks.length > 0 && (
-                <div>
-                    <div className="mb-2.5 text-xs font-bold uppercase tracking-wide text-(--text-secondary)">
-                        Subtasks
-                    </div>
-                    <div className="flex flex-col gap-2.5">
-                        {task.subtasks.map((s, i) => (
-                            <label key={i} className="flex items-center gap-2.5 text-sm">
-                                <span
-                                    className={`flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded-[5px] ${
-                                        s.done ? "bg-(--accent-primary)" : "border-[1.5px] border-(--border-strong)"
-                                    }`}
-                                >
-                                    {s.done && <Icon name="check" size={11} className="invert brightness-200" />}
-                                </span>
-                                <span className={s.done ? "text-(--text-secondary) line-through" : "text-(--text-primary)"}>
-                                    {s.label}
-                                </span>
-                            </label>
-                        ))}
-                    </div>
                 </div>
             )}
 
@@ -184,10 +162,10 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                 title="Delete task?"
                 footer={
                     <>
-                        <Button className='cursor-pointer' variant="secondary" size="s" onClick={() => setConfirmingDelete(false)}>
+                        <Button variant="secondary" size="s" onClick={() => setConfirmingDelete(false)}>
                             Cancel
                         </Button>
-                        <Button className='cursor-pointer' variant="danger" size="s" onClick={() => onDelete(task.id)}>
+                        <Button variant="danger" size="s" onClick={() => onDelete(task.id)}>
                             Delete
                         </Button>
                     </>

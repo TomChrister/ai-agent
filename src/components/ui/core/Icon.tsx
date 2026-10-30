@@ -9,7 +9,7 @@ interface IconProps extends Omit<ComponentPropsWithoutRef<"img">, "src" | "alt" 
 function Icon({ name, size = 18, className = "", ...rest }: IconProps) {
     return (
         <img
-            src={`https://unpkg.com/lucide-static@latest/icons/${name}.svg`}
+            src={`https://unpkg.com/lucide-static@1.56.0/icons/${name}.svg`}
             width={size}
             height={size}
             alt=""

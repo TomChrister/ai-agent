@@ -63,7 +63,6 @@ function Landing({
                     goal={goal}
                     setGoal={setGoal}
                     onPlan={onPlan}
-                    loading={loading}
                     examples={["A birthday party", "A bachelor party", "A work partner meeting"]}
                 />
             ) : (
@@ -93,7 +92,7 @@ function Landing({
                 onDelete={onDeleteTask}
             />
 
-            {error && <Toast tone="error">{error}</Toast>}
+            {error && <Toast>{error}</Toast>}
         </div>
     );
 }
