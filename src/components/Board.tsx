@@ -131,10 +131,10 @@ function Board({
                 </div>
                 <div className="flex items-center gap-4">
                     <Button
-                        className='cursor-pointer'
                         variant="secondary"
                         size="s"
                         onClick={onReset}
+                        disabled={revising}
                         icon={<Icon name="rotate-ccw" size={14} />}
                     >
                         Reset
@@ -185,7 +185,6 @@ function Board({
                                     statusTone={col.tone}
                                     statusLabel={col.title}
                                     onClick={() => onCardClick(task)}
-                                    draggable
                                     dragging={draggingId === task.id}
                                     onDragStart={(e) => handleDragStart(e, task)}
                                     onDragEnd={handleDragEnd}

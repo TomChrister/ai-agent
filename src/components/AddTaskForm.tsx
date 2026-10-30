@@ -48,12 +48,14 @@ function AddTaskForm({ onAdd }: AddTaskFormProps) {
             <input
                 autoFocus
                 value={title}
+                maxLength={500}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Task title"
                 className="border-none bg-transparent text-sm font-semibold text-(--text-primary) outline-none"
             />
             <textarea
                 value={description}
+                maxLength={500}
                 onChange={(e) => setDescription(e.target.value)}
                 placeholder="Description (optional)"
                 rows={2}

@@ -19,12 +19,12 @@ function RevisePreviewDialog({ revision, tasks, onApply, onDiscard }: RevisePrev
 
     return (
         <Dialog
-            open={!!revision}
+            open
             onClose={onDiscard}
             title="Review changes"
             footer={
                 <>
-                    <Button variant="secondary" size="s" onClick={onDiscard} className="cursor-pointer">
+                    <Button variant="secondary" size="s" onClick={onDiscard}>
                         Discard
                     </Button>
                     <Button
@@ -32,7 +32,6 @@ function RevisePreviewDialog({ revision, tasks, onApply, onDiscard }: RevisePrev
                         size="s"
                         onClick={onApply}
                         disabled={changeCount === 0}
-                        className="cursor-pointer"
                     >
                         Apply changes
                     </Button>

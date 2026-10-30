@@ -66,8 +66,7 @@ The frontend always calls **relative** paths (`/api/planner`, `/api/revise`):
 - **In production on Vercel**, `/api/*` is served by the serverless functions in
   `api/planner.ts` and `api/revise.ts`.
 
-The two implementations share the same prompts and behavior; keep them in sync when
-you change agent logic.
+`server.ts` mounts those same handlers, so local dev and production run identical agent code.
 
 ---
 
@@ -144,8 +143,9 @@ CI passes.
 ```
 ai-agent/
 ├── api/                     # Vercel serverless functions (production backend)
-│   ├── planner.js           #   POST /api/planner  → Planner Agent
-│   └── revise.js            #   POST /api/revise   → Revise Agent
+│   ├── _claude.ts           #   Shared Claude call (not a route)
+│   ├── planner.ts           #   POST /api/planner  → Planner Agent
+│   └── revise.ts            #   POST /api/revise   → Revise Agent
 ├── server.ts                # Express server (local dev backend, port 3000)
 ├── vite.config.ts           # Vite + React + Tailwind; /api proxy for dev
 ├── index.html               # App shell + favicons
@@ -153,18 +153,18 @@ ai-agent/
 └── src/
     ├── App.tsx              # Top-level state, plan/revise logic, localStorage
     ├── components/
-    │   ├── Landing.jsx          # Goal input → board switch
-    │   ├── Board.jsx            # Kanban board (drag & drop, collapsible columns)
-    │   ├── PlanningLoader.jsx   # Loading state while planning
-    │   ├── ReviseBar.jsx        # Natural-language revise input
-    │   ├── RevisePreviewDialog.jsx
-    │   ├── TaskDetailPanel.jsx
-    │   ├── AddTaskForm.jsx
+    │   ├── Landing.tsx          # Goal input → board switch
+    │   ├── Board.tsx            # Kanban board (drag & drop, collapsible columns)
+    │   ├── PlanningLoader.tsx   # Loading state while planning
+    │   ├── ReviseBar.tsx        # Natural-language revise input
+    │   ├── RevisePreviewDialog.tsx
+    │   ├── TaskDetailPanel.tsx
+    │   ├── AddTaskForm.tsx
     │   └── ui/                  # Reusable UI primitives (core, forms, kanban, …)
     ├── lib/
     │   ├── parsePlan.ts         # Planner JSON → task cards
-    │   ├── parseRevision.js     # Revise JSON → change set
-    │   ├── applyRevision.js     # Apply add/update/remove to tasks
+    │   ├── parseRevision.ts     # Revise JSON → change set
+    │   ├── applyRevision.ts     # Apply add/update/remove to tasks
     │   └── planStorage.ts       # localStorage save/load/clear
     └── styles/tokens.css        # Design tokens (colors, surfaces, status)
 ```

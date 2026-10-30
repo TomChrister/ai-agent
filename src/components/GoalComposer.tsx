@@ -6,11 +6,10 @@ interface GoalComposerProps {
     goal: string;
     setGoal: Dispatch<SetStateAction<string>>;
     onPlan: () => void;
-    loading: boolean;
-    examples?: string[];
+    examples: string[];
 }
 
-function GoalComposer({ goal, setGoal, onPlan, loading, examples = [] }: GoalComposerProps) {
+function GoalComposer({ goal, setGoal, onPlan, examples }: GoalComposerProps) {
     return (
         <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 py-20 text-center">
             <h1 className="m-0 max-w-2xl text-4xl md:text-5xl font-bold tracking-tight leading-tight text-(--text-primary)">
@@ -24,18 +23,18 @@ function GoalComposer({ goal, setGoal, onPlan, loading, examples = [] }: GoalCom
                 <input
                     type="text"
                     value={goal}
+                    maxLength={500}
                     onChange={(e) => setGoal(e.target.value)}
                     placeholder="e.g. a birthday party, wedding, confirmation…"
                     className="flex-1 border-none bg-transparent text-base text-(--text-primary) outline-none"
                 />
                 <Button
-                    className='cursor-pointer'
                     variant="primary"
                     onClick={onPlan}
-                    disabled={loading}
-                    iconRight={!loading && <Icon name="arrow-right" size={16} className="invert brightness-200" />}
+                    disabled={!goal.trim()}
+                    iconRight={<Icon name="arrow-right" size={16} className="invert brightness-200" />}
                 >
-                    {loading ? "Planning…" : "Plan it"}
+                    Plan it
                 </Button>
             </div>
 

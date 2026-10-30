@@ -3,7 +3,7 @@ import type { Plan, Task } from "../types";
 const STORAGE_KEY = "planbase.plan";
 
 /** Persists the current goal + task list + revision count so a saved plan survives a page refresh. */
-export function savePlan(goal: string, tasks: Task[], revisionCount = 0): void {
+export function savePlan(goal: string, tasks: Task[], revisionCount: number): void {
     try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({ goal, tasks, revisionCount }));
     } catch {

@@ -1,21 +1,22 @@
-import Anthropic from "@anthropic-ai/sdk";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+import { askClaude } from "./_claude";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { goal, tasks, instruction } = req.body;
+    const { goal, tasks, instruction } = req.body ?? {};
+    // Public endpoint spending our API key: cap input before it reaches Claude.
+    const isText = (v: unknown) => typeof v === "string" && v.trim() !== "" && v.length <= 500;
+    if (!isText(goal) || !isText(instruction)) {
+        return res.status(400).json({ error: "goal and instruction must be 1-500 characters" });
+    }
+    if (!Array.isArray(tasks) || tasks.length > 20 || JSON.stringify(tasks).length > 10_000) {
+        return res.status(400).json({ error: "This plan is too big to revise (max 20 tasks and 10,000 characters of task text)." });
+    }
 
-    try {
-        const message = await client.messages.create({
-            model: "claude-sonnet-4-6",
-            temperature: 0.2,
-            max_tokens: 1024,
-            system: `You are a Revise Agent for an AI task planner. You are given the current goal,
+    await askClaude(res, `You are a Revise Agent for an AI task planner. You are given the current goal,
             the current list of tasks, and an instruction describing a change the user wants
             (e.g. "add two more tasks about music", "focus more on the venue", "remove the budget task").
 
@@ -35,17 +36,5 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             "add": [ { "title": "short title", "description": "what needs to be done" } ],
             "update": [ { "id": 1, "title": "short title", "description": "what needs to be done" } ],
             "remove": [3]
-            }`,
-            messages: [{
-                role: "user",
-                content: `Goal: ${goal}\n\nCurrent tasks:\n${JSON.stringify(tasks, null, 2)}\n\nInstruction: ${instruction}`
-            }]
-        });
-
-        const block = message.content[0];
-        res.status(200).json({ result: block.type === "text" ? block.text : "" });
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ error: "Something went wrong" });
-    }
+            }`, `Goal: ${goal}\n\nCurrent tasks:\n${JSON.stringify(tasks, null, 2)}\n\nInstruction: ${instruction}`);
 }

@@ -9,7 +9,9 @@ export function applyRevision(tasks: Task[], revision: Revision): Task[] {
         .filter((t) => !removeIds.has(t.id))
         .map((t) => {
             const patch = revision.update.find((u) => u.id === t.id);
-            return patch ? { ...t, ...patch } : t;
+            return patch
+                ? { ...t, title: patch.title ?? t.title, description: patch.description ?? t.description }
+                : t;
         });
 
     const added: Task[] = revision.add.map((t) => ({
