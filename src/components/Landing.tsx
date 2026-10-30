@@ -63,7 +63,7 @@ function Landing({
                     goal={goal}
                     setGoal={setGoal}
                     onPlan={onPlan}
-                    examples={["A birthday party", "A bachelor party", "A work partner meeting"]}
+                    examples={["A birthday party", "A bachelor party", "A work partner meeting", "A weekend trip"]}
                 />
             ) : (
                 <Board
