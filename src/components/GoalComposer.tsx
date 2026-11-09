@@ -12,14 +12,14 @@ interface GoalComposerProps {
 function GoalComposer({ goal, setGoal, onPlan, examples }: GoalComposerProps) {
     return (
         <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 py-20 text-center">
-            <h1 className="m-0 max-w-2xl text-4xl md:text-5xl font-bold tracking-tight leading-tight text-(--text-primary)">
-                Turn any goal into a <span className='text-(--accent-primary)'>plan,</span> instantly.
+            <h1 className="m-0 max-w-3xl text-[40px] md:text-[60px] font-normal tracking-(--tracking-display) leading-[1.13] text-(--text-strong)">
+                Turn any goal into a plan, instantly.
             </h1>
-            <p className="max-w-md text-lg text-(--text-secondary)">
+            <p className="max-w-md text-base text-(--text-secondary)">
                 Describe what you want to achieve — our AI Planner breaks it into tasks on a kanban board.
             </p>
 
-            <div className="flex w-full max-w-xl gap-2 rounded-full border border-(--border-default) bg-(--surface-card) p-2 pl-6 shadow-(--shadow-s)">
+            <div className="flex w-full max-w-xl gap-2 rounded-full border border-(--border-subtle) bg-(--surface-card) p-2 pl-6 shadow-(--shadow-sm)">
                 <input
                     type="text"
                     value={goal}
@@ -32,13 +32,13 @@ function GoalComposer({ goal, setGoal, onPlan, examples }: GoalComposerProps) {
                     variant="primary"
                     onClick={onPlan}
                     disabled={!goal.trim()}
-                    iconRight={<Icon name="arrow-right" size={16} className="invert brightness-200" />}
+                    iconRight={<Icon name="arrow-right" size={16} />}
                 >
                     Plan it
                 </Button>
             </div>
 
-            <p className="text-sm text-gray-600">
+            <p className="text-[10px] font-medium uppercase tracking-(--tracking-label) text-(--text-muted)">
                 This chat uses Claude Sonnet 4.6
             </p>
 
@@ -48,7 +48,7 @@ function GoalComposer({ goal, setGoal, onPlan, examples }: GoalComposerProps) {
                         <button
                             key={ex}
                             onClick={() => setGoal(ex)}
-                            className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--surface-sunken) px-3.5 py-1.5 text-sm font-medium text-(--text-secondary) hover:bg-(--border-subtle)"
+                            className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--surface-card) px-3.5 py-1.5 text-sm text-(--text-primary) transition duration-150 hover:border-(--border-default)"
                         >
                             {ex}
                         </button>

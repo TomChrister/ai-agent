@@ -59,7 +59,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
     return (
         <div
             ref={panelRef}
-            className="fixed inset-y-0 right-0 z-60 flex w-95 flex-col gap-4 overflow-y-auto bg-(--surface-card) p-6 shadow-(--shadow-l)"
+            className="fixed inset-y-0 right-0 z-60 flex w-95 flex-col gap-4 overflow-y-auto bg-(--surface-card) p-6 shadow-(--shadow-xl)"
         >
             <div className="flex items-start justify-between gap-2">
                 {isEditing ? (
@@ -68,10 +68,10 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                         value={draftTitle}
                         maxLength={500}
                         onChange={(e) => setDraftTitle(e.target.value)}
-                        className="flex-1 rounded-lg border border-(--border-default) px-2.5 py-1.5 text-lg font-semibold text-(--text-primary) outline-none focus:border-(--focus-ring)"
+                        className="flex-1 rounded-(--radius-inputs) border border-(--border-default) px-2.5 py-1.5 text-lg font-medium text-(--text-primary) outline-none focus:border-(--focus-ring)"
                     />
                 ) : (
-                    <div className="max-w-65 text-xl font-semibold text-(--text-primary)">{task.title}</div>
+                    <div className="max-w-65 text-xl font-medium text-(--text-strong)">{task.title}</div>
                 )}
                 <div className="flex items-center gap-2">
                     {!isEditing && (
@@ -85,7 +85,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                             </button>
                             <button
                                 onClick={() => setConfirmingDelete(true)}
-                                className="cursor-pointer border-none bg-transparent p-0 text-(--text-secondary) hover:text-(--coral-500)"
+                                className="cursor-pointer border-none bg-transparent p-0 text-(--text-secondary) hover:text-(--danger)"
                                 aria-label="Delete task"
                             >
                                 <Icon name="trash-2" size={16} />
@@ -110,7 +110,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                     onChange={(e) => setDraftDescription(e.target.value)}
                     placeholder="Description"
                     rows={4}
-                    className="resize-none rounded-lg border border-(--border-default) p-2.5 text-sm text-(--text-primary) outline-none focus:border-(--focus-ring)"
+                    className="resize-none rounded-(--radius-inputs) border border-(--border-default) p-2.5 text-sm text-(--text-primary) outline-none focus:border-(--focus-ring)"
                 />
             ) : (
                 task.description && (
@@ -122,13 +122,13 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                 <div className="flex justify-end gap-2">
                     <button
                         onClick={() => setIsEditing(false)}
-                        className="cursor-pointer rounded-full px-3.5 py-1.5 text-sm font-semibold text-(--text-secondary) hover:bg-(--surface-sunken)"
+                        className="cursor-pointer rounded-full px-3.5 py-1.5 text-sm font-medium text-(--text-primary) hover:bg-(--surface-sunken)"
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleSave}
-                        className="cursor-pointer rounded-full bg-(--accent-primary) px-3.5 py-1.5 text-sm font-semibold text-white hover:bg-(--accent-primary-hover)"
+                        className="cursor-pointer rounded-full bg-(--accent-primary) px-3.5 py-1.5 text-sm font-medium text-(--text-on-accent) hover:bg-(--accent-primary-hover)"
                     >
                         Save
                     </button>
@@ -136,7 +136,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
             )}
 
             <div>
-                <div className="mb-2.5 text-xs font-bold uppercase tracking-wide text-(--text-secondary)">
+                <div className="mb-2.5 text-[10px] font-medium uppercase tracking-(--tracking-label) text-(--text-muted)">
                     Status
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -144,10 +144,10 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                         <button
                             key={s.key}
                             onClick={() => onMove(task.id, s.key)}
-                            className={`cursor-pointer rounded-full px-3.5 py-1.5 text-sm font-semibold transition duration-150 ${
+                            className={`cursor-pointer rounded-full px-3.5 py-1.5 text-sm font-medium transition duration-150 ${
                                 task.col === s.key
-                                    ? "bg-(--accent-primary) text-white"
-                                    : "border border-(--border-default) bg-(--surface-card) text-(--text-primary) hover:bg-(--surface-sunken)"
+                                    ? "bg-(--accent-primary) text-(--text-on-accent)"
+                                    : "border border-(--border-default) bg-(--surface-card) text-(--text-primary) hover:border-(--border-strong)"
                             }`}
                         >
                             {s.label}

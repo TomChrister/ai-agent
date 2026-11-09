@@ -32,7 +32,7 @@ function AddTaskForm({ onAdd }: AddTaskFormProps) {
         return (
             <button
                 onClick={() => setOpen(true)}
-                className="flex cursor-pointer items-center justify-center gap-1.5 rounded-xl border border-dashed border-(--border-default) py-2.5 text-sm font-medium text-(--text-secondary) transition duration-150 hover:border-(--border-strong) hover:text-(--text-primary)"
+                className="flex cursor-pointer items-center justify-center gap-1.5 rounded-(--radius-cards) border border-dashed border-(--border-default) py-2.5 text-sm font-medium text-(--text-secondary) transition duration-150 hover:border-(--border-strong) hover:text-(--text-primary)"
             >
                 <Icon name="plus" size={14} />
                 Add task
@@ -43,7 +43,7 @@ function AddTaskForm({ onAdd }: AddTaskFormProps) {
     return (
         <form
             onSubmit={handleSubmit}
-            className="flex flex-col gap-2 rounded-xl border border-(--border-subtle) bg-(--surface-card) p-3 shadow-(--shadow-xs)"
+            className="flex flex-col gap-2 rounded-(--radius-cards) border border-(--border-subtle) bg-(--surface-card) p-4"
         >
             <input
                 autoFocus
@@ -51,7 +51,7 @@ function AddTaskForm({ onAdd }: AddTaskFormProps) {
                 maxLength={500}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Task title"
-                className="border-none bg-transparent text-sm font-semibold text-(--text-primary) outline-none"
+                className="border-none bg-transparent text-sm font-medium text-(--text-strong) outline-none"
             />
             <textarea
                 value={description}
@@ -65,13 +65,13 @@ function AddTaskForm({ onAdd }: AddTaskFormProps) {
                 <button
                     type="button"
                     onClick={handleCancel}
-                    className="cursor-pointer rounded-full px-3 py-1 text-xs font-semibold text-(--text-secondary) hover:bg-(--surface-sunken)"
+                    className="cursor-pointer rounded-full px-3 py-1 text-xs font-medium text-(--text-primary) hover:bg-(--surface-sunken)"
                 >
                     Cancel
                 </button>
                 <button
                     type="submit"
-                    className="cursor-pointer rounded-full bg-(--accent-primary) px-3 py-1 text-xs font-semibold text-white hover:bg-(--accent-primary-hover)"
+                    className="cursor-pointer rounded-full bg-(--accent-primary) px-3 py-1 text-xs font-medium text-(--text-on-accent) hover:bg-(--accent-primary-hover)"
                 >
                     Add
                 </button>

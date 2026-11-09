@@ -34,13 +34,13 @@ function PlanningLoader() {
                 {[0, 1, 2].map((col) => (
                     <div
                         key={col}
-                        className="flex flex-col gap-3 rounded-2xl bg-(--surface-sunken) p-4 md:min-w-50 md:flex-1"
+                        className="flex flex-col gap-3 rounded-(--radius-panel) bg-(--surface-column) p-4 md:min-w-50 md:flex-1"
                     >
-                        <div className="h-3 w-20 animate-pulse rounded bg-(--border-default)" />
+                        <div className="h-3 w-20 animate-pulse rounded-full bg-(--border-default)" />
                         {[0, 1].map((row) => (
                             <div
                                 key={row}
-                                className="h-16 animate-pulse rounded-xl border border-(--border-subtle) bg-(--surface-card)"
+                                className="h-16 animate-pulse rounded-(--radius-cards) border border-(--border-subtle) bg-(--surface-card)"
                                 style={{ animationDelay: `${(col * 2 + row) * 120}ms` }}
                             />
                         ))}

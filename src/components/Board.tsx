@@ -124,7 +124,7 @@ function Board({
         <div className="flex flex-1 flex-col">
             <div className="flex items-center justify-between px-8 pt-5">
                 <div>
-                    <div className="text-2xl font-semibold text-(--text-primary)">{goal}</div>
+                    <div className="text-[25px] font-medium leading-[1.4] tracking-[-0.01em] text-(--text-strong)">{goal}</div>
                     <div className="mt-1 text-sm text-(--text-secondary)">
                         AI Planner Agent · {tasks.length} tasks
                     </div>
