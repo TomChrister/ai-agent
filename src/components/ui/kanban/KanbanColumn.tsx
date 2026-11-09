@@ -41,7 +41,7 @@ function KanbanColumn({
             onDragOver={onDragOver}
             onDragLeave={onDragLeave}
             onDrop={onDrop}
-            className={`flex flex-col gap-3 rounded-2xl bg-(--surface-sunken) p-4 outline-2 outline-offset-[-2px] transition-colors md:min-w-[260px] md:flex-1 ${
+            className={`flex flex-col gap-3 rounded-(--radius-panel) bg-(--surface-column) p-4 outline-2 outline-offset-[-2px] transition-colors md:min-w-[260px] md:flex-1 ${
                 dropActive ? "bg-(--surface-card) outline-dashed outline-(--text-secondary)" : "outline-transparent"
             }`}
         >
@@ -52,8 +52,8 @@ function KanbanColumn({
                 className="flex items-center gap-2 text-left md:pointer-events-none md:cursor-default"
             >
                 <span className={`h-2 w-2 rounded-full ${DOT_STYLES[tone]}`} />
-                <span className="text-sm font-semibold text-(--text-primary)">{title}</span>
-                <span className="text-xs font-semibold text-(--text-secondary)">{count}</span>
+                <span className="text-sm font-medium text-(--text-strong)">{title}</span>
+                <span className="text-xs font-medium text-(--text-muted)">{count}</span>
                 <Icon
                     name="chevron-down"
                     size={16}

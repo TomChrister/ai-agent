@@ -42,7 +42,7 @@ function RevisePreviewDialog({ revision, tasks, onApply, onDiscard }: RevisePrev
                 {revision.add.map((t, i) => (
                     <div key={`add-${i}`} className="flex flex-col gap-1 text-sm">
                         <div className="flex items-start gap-2">
-                            <span className="mt-0.5 shrink-0 rounded-full bg-(--status-done-bg) px-2 py-0.5 text-[11px] font-semibold text-[#2c6b18]">
+                            <span className="mt-0.5 shrink-0 rounded-full bg-(--status-done-bg) px-2 py-0.5 text-[11px] font-medium text-(--text-primary)">
                                 + Add
                             </span>
                             <span className="text-(--text-primary)">{t.title}</span>
@@ -56,7 +56,7 @@ function RevisePreviewDialog({ revision, tasks, onApply, onDiscard }: RevisePrev
                 {revision.update.map((t) => (
                     <div key={`update-${t.id}`} className="flex flex-col gap-1 text-sm">
                         <div className="flex items-start gap-2">
-                            <span className="mt-0.5 shrink-0 rounded-full bg-(--status-progress-bg) px-2 py-0.5 text-[11px] font-semibold text-[#8a5200]">
+                            <span className="mt-0.5 shrink-0 rounded-full bg-(--surface-sunken) px-2 py-0.5 text-[11px] font-medium text-(--text-primary)">
                                 ~ Update
                             </span>
                             <span className="text-(--text-primary)">
@@ -73,7 +73,7 @@ function RevisePreviewDialog({ revision, tasks, onApply, onDiscard }: RevisePrev
                 {revision.remove.map((id) => (
                     <div key={`remove-${id}`} className="flex flex-col gap-1 text-sm">
                         <div className="flex items-start gap-2">
-                            <span className="mt-0.5 shrink-0 rounded-full bg-[#ffe3dc] px-2 py-0.5 text-[11px] font-semibold text-(--coral-600)">
+                            <span className="mt-0.5 shrink-0 rounded-full bg-(--danger-bg) px-2 py-0.5 text-[11px] font-medium text-(--danger)">
                                 − Remove
                             </span>
                             <span className="text-(--text-primary)">{findTitle(id)}</span>

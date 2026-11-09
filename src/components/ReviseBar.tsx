@@ -34,7 +34,7 @@ function ReviseBar({ onSubmit, loading, revisionsUsed, revisionsMax }: ReviseBar
                         ? "No revisions left"
                         : 'Ask Claude to adjust the plan — e.g. "add two tasks about music" or "focus more on the venue"'
                 }
-                className="w-full max-w-md rounded-full border border-(--border-default) bg-(--surface-card) px-4 py-2 text-sm text-(--text-primary) outline-none transition duration-150 focus:border-(--focus-ring) disabled:opacity-60"
+                className="w-full max-w-md rounded-(--radius-inputs) border border-(--border-default) bg-(--surface-card) px-4 py-2 text-sm text-(--text-primary) outline-none transition duration-150 focus:border-(--focus-ring) disabled:opacity-60"
             />
             <Button
                 variant="secondary"

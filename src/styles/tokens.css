@@ -1,46 +1,64 @@
-/* Design tokens from Claude Design — "Planbase Design System" (only the ones in use) */
+/* Design tokens from the "Merlin" design system (design-reference/) — only the ones in use */
 :root {
-  --teal-200: #a3f3da; --teal-400: #34cda8; --teal-500: #0fb28c; --teal-600: #0a8f70; --teal-800: #0b5a48;
-  --amber-500: #ffa714;
-  --coral-500: #ff6647; --coral-600: #e8492a;
-  --ink-950: #0b0e10; --ink-700: #3a3f45; --ink-500: #686f78;
-  --ink-300: #a2a8b0; --ink-200: #c8ccd1; --ink-100: #e5e7ea; --ink-50: #f4f5f6;
-  --white: #ffffff;
+  /* Primitives */
+  --color-paper-white: #f5f5f4;
+  --color-card-snow: #ffffff;
+  --color-ink-black: #000000;
+  --color-body-charcoal: #1c1d1f;
+  --color-steel-gray: #6a6b6c;
+  --color-graphite: #808080;
+  --color-ash: #aaaaaa;
+  --color-mist: #dddddd;
+  --color-cloud: #eeeeee;
+  --color-signal-green: #34c759;
 
-  --text-primary: var(--ink-950);
-  --text-secondary: var(--ink-500);
+  /* Semantic */
+  --text-strong: var(--color-ink-black);
+  --text-primary: var(--color-body-charcoal);
+  --text-secondary: var(--color-steel-gray);
+  --text-muted: var(--color-graphite);
 
-  --surface-page: #f9faf9;
-  --surface-card: var(--white);
-  --surface-sunken: var(--ink-50);
+  --surface-page: var(--color-paper-white);
+  --surface-card: var(--color-card-snow);
+  --surface-sunken: var(--color-cloud);
+  /* Darker than sunken so board columns stand out from the page */
+  --surface-column: #e3e3e2;
 
-  --border-subtle: var(--ink-100);
-  --border-default: var(--ink-200);
-  --border-strong: var(--ink-700);
+  --border-subtle: var(--color-cloud);
+  --border-default: var(--color-mist);
+  --border-strong: var(--color-body-charcoal);
 
-  --accent-primary: var(--teal-500);
-  --accent-primary-hover: var(--teal-600);
+  /* Signal Green is the only chroma: primary action, selected state, "done" */
+  --accent-primary: var(--color-signal-green);
+  --accent-primary-hover: #2db84f;
+  /* Black, not white, on green: white on #34c759 fails contrast */
+  --text-on-accent: var(--color-ink-black);
 
-  --status-todo: var(--ink-300);
-  --status-todo-bg: var(--ink-50);
-  --status-progress: var(--amber-500);
-  --status-progress-bg: #fff4e0;
-  --status-done: #4fae2e;
-  --status-done-bg: #eafce0;
+  --status-todo: var(--color-ash);
+  --status-progress: var(--color-steel-gray);
+  --status-done: var(--color-signal-green);
+  --status-done-bg: rgb(52 199 89 / 0.14);
 
-  --focus-ring: var(--teal-400);
-  --shadow-color: 220 20% 30%;
+  /* Not part of Merlin: kept only so destructive actions and errors stay recognisable */
+  --danger: #d92d20;
+  --danger-bg: #fdecea;
 
-  --font-display: 'Source Sans 3', system-ui, sans-serif;
-  --font-body: 'Manrope', system-ui, sans-serif;
+  --focus-ring: var(--color-body-charcoal);
+
+  --font-inter: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --text-body-m: 16px; --text-body-s: 14px;
-  --leading-normal: 1.55;
-  --tracking-tight: -0.02em;
-  --weight-semibold: 600;
+  --leading-body: 1.5;
+  --tracking-display: -0.031em;
+  --tracking-label: 0.036em;
 
-  --shadow-xs: 0 1px 2px hsl(var(--shadow-color) / 0.06);
-  --shadow-s: 0 2px 6px hsl(var(--shadow-color) / 0.08);
-  --shadow-m: 0 8px 24px hsl(var(--shadow-color) / 0.10);
-  --shadow-l: 0 20px 48px hsl(var(--shadow-color) / 0.14);
+  --radius-cards: 20px;
+  --radius-inputs: 12.5px;
+  --radius-panel: 30px;
+
+  --shadow-subtle: rgb(235, 232, 233) 1px 3px 1px 0px;
+  --shadow-sm: rgb(238, 238, 238) 0px 3px 8px 0px;
+  --shadow-xl: rgba(0, 0, 0, 0.25) 0px 40px 60px 0px;
+
+  --gradient-dawn: linear-gradient(180deg, rgb(150 223 255 / 0.5) 0px, var(--color-paper-white) 420px);
 }

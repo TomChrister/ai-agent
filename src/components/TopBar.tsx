@@ -2,12 +2,12 @@ import Icon from "./ui/core/Icon";
 
 function TopBar() {
     return (
-        <header className="border-b border-(--border-subtle)">
-            <div className="mx-auto flex max-w-6xl items-center justify-between px-8 py-4">
-                <span className="text-2xl font-bold tracking-tight text-(--accent-primary)">Planbase</span>
+        <header className="px-4 pt-4 md:px-8">
+            <div className="mx-auto flex max-w-[1200px] items-center justify-between rounded-full bg-(--surface-card) py-2.5 pl-6 pr-3 shadow-(--shadow-sm)">
+                <span className="text-xl font-semibold tracking-(--tracking-display) text-(--text-strong)">Planbase</span>
                 <div className="flex items-center gap-4">
                     <Icon name="bell" size={18} />
-                    <span className="flex h-7.5 w-7.5 items-center justify-center rounded-full bg-(--teal-200) text-[13px] font-bold text-(--teal-800)">
+                    <span className="flex h-7.5 w-7.5 items-center justify-center rounded-full bg-(--surface-sunken) text-[13px] font-medium text-(--text-primary)">
                         A
                     </span>
                 </div>
