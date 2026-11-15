@@ -27,5 +27,3 @@ dist-ssr
 .env
 # Understand-Anything knowledge graph
 .ua/
-
-/design-reference
