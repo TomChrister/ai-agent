@@ -1,7 +1,7 @@
 import type { DragEventHandler, MouseEventHandler, ReactNode } from "react";
 
 const STATUS_STYLES = {
-    neutral: "bg-(--surface-sunken) text-(--text-secondary)",
+    todo: "bg-(--surface-sunken) text-(--text-secondary)",
     progress: "bg-(--surface-sunken) text-(--text-primary)",
     done: "bg-(--status-done-bg) text-(--text-primary)",
 };

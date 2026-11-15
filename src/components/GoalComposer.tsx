@@ -2,14 +2,15 @@ import type { Dispatch, SetStateAction } from "react";
 import Button from "./ui/core/Button";
 import Icon from "./ui/core/Icon";
 
+const EXAMPLES = ["A birthday party", "A bachelor party", "A work partner meeting", "A weekend trip"];
+
 interface GoalComposerProps {
     goal: string;
     setGoal: Dispatch<SetStateAction<string>>;
     onPlan: () => void;
-    examples: string[];
 }
 
-function GoalComposer({ goal, setGoal, onPlan, examples }: GoalComposerProps) {
+function GoalComposer({ goal, setGoal, onPlan }: GoalComposerProps) {
     return (
         <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 py-20 text-center">
             <h1 className="m-0 max-w-3xl text-[40px] md:text-[60px] font-normal tracking-(--tracking-display) leading-[1.13] text-(--text-strong)">
@@ -42,19 +43,17 @@ function GoalComposer({ goal, setGoal, onPlan, examples }: GoalComposerProps) {
                 This chat uses Claude Sonnet 4.6
             </p>
 
-            {examples.length > 0 && (
-                <div className="flex flex-wrap justify-center gap-2">
-                    {examples.map((ex) => (
-                        <button
-                            key={ex}
-                            onClick={() => setGoal(ex)}
-                            className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--surface-card) px-3.5 py-1.5 text-sm text-(--text-primary) transition duration-150 hover:border-(--border-default)"
-                        >
-                            {ex}
-                        </button>
-                    ))}
-                </div>
-            )}
+            <div className="flex flex-wrap justify-center gap-2">
+                {EXAMPLES.map((ex) => (
+                    <button
+                        key={ex}
+                        onClick={() => setGoal(ex)}
+                        className="cursor-pointer rounded-full border border-(--border-subtle) bg-(--surface-card) px-3.5 py-1.5 text-sm text-(--text-primary) transition duration-150 hover:border-(--border-default)"
+                    >
+                        {ex}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 }

@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import type { ColumnKey, Task, TaskUpdate } from "../types";
+import { COLUMNS, type ColumnKey, type Task, type TaskUpdate } from "../types";
 import Icon from "./ui/core/Icon";
 import Button from "./ui/core/Button";
 import Dialog from "./ui/overlays/Dialog";
-
-const STATUSES: { key: ColumnKey; label: string }[] = [
-    { key: "todo", label: "To Do" },
-    { key: "progress", label: "In Progress" },
-    { key: "done", label: "Done" },
-];
 
 interface TaskDetailPanelProps {
     task: Task | null;
@@ -44,8 +38,8 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
     if (!task) return null;
 
     function startEditing() {
-        setDraftTitle(task!.title ?? "");
-        setDraftDescription(task!.description ?? "");
+        setDraftTitle(task!.title);
+        setDraftDescription(task!.description);
         setIsEditing(true);
     }
 
@@ -104,7 +98,6 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
 
             {isEditing ? (
                 <textarea
-                    autoFocus={false}
                     value={draftDescription}
                     maxLength={500}
                     onChange={(e) => setDraftDescription(e.target.value)}
@@ -140,17 +133,17 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                     Status
                 </div>
                 <div className="flex flex-wrap gap-2">
-                    {STATUSES.map((s) => (
+                    {COLUMNS.map((col) => (
                         <button
-                            key={s.key}
-                            onClick={() => onMove(task.id, s.key)}
+                            key={col.key}
+                            onClick={() => onMove(task.id, col.key)}
                             className={`cursor-pointer rounded-full px-3.5 py-1.5 text-sm font-medium transition duration-150 ${
-                                task.col === s.key
+                                task.col === col.key
                                     ? "bg-(--accent-primary) text-(--text-on-accent)"
                                     : "border border-(--border-default) bg-(--surface-card) text-(--text-primary) hover:border-(--border-strong)"
                             }`}
                         >
-                            {s.label}
+                            {col.title}
                         </button>
                     ))}
                 </div>

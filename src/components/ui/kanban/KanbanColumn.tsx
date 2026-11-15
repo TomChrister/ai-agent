@@ -2,7 +2,7 @@ import type { DragEventHandler, ReactNode } from "react";
 import Icon from "../core/Icon";
 
 const DOT_STYLES = {
-    neutral: "bg-(--status-todo)",
+    todo: "bg-(--status-todo)",
     progress: "bg-(--status-progress)",
     done: "bg-(--status-done)",
 };

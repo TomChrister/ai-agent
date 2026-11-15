@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { askClaude } from "./_claude.js";
+import { askClaude, isText } from "./_claude.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (req.method !== "POST") {
@@ -7,8 +7,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     const { goal } = req.body ?? {};
-    // Public endpoint spending our API key: cap input before it reaches Claude.
-    if (typeof goal !== "string" || !goal.trim() || goal.length > 500) {
+    if (!isText(goal)) {
         return res.status(400).json({ error: "goal must be 1-500 characters" });
     }
 
