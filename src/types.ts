@@ -1,4 +1,11 @@
-export type ColumnKey = "todo" | "progress" | "done";
+/** The board's columns, in display order. A task's status is the key of its column. */
+export const COLUMNS = [
+    { key: "todo", title: "To Do" },
+    { key: "progress", title: "In Progress" },
+    { key: "done", title: "Done" },
+] as const;
+
+export type ColumnKey = (typeof COLUMNS)[number]["key"];
 
 export interface Task {
     id: number;

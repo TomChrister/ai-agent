@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import Landing from "./components/Landing";
+import TopBar from "./components/TopBar";
+import GoalComposer from "./components/GoalComposer";
+import PlanningLoader from "./components/PlanningLoader";
+import Board from "./components/Board";
+import RevisePreviewDialog from "./components/RevisePreviewDialog";
+import TaskDetailPanel from "./components/TaskDetailPanel";
+import Toast from "./components/ui/overlays/Toast";
 import { parsePlan } from "./lib/parsePlan";
 import { parseRevision } from "./lib/parseRevision";
 import { applyRevision } from "./lib/applyRevision";
@@ -9,15 +15,26 @@ import { Analytics } from "@vercel/analytics/react"
 
 const MAX_REVISIONS = 5;
 
+const postJson = (url: string, body: unknown) =>
+    fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    });
+
 function App() {
-    const [goal, setGoal] = useState(() => loadPlan()?.goal ?? "");
-    const [tasks, setTasks] = useState<Task[] | null>(() => loadPlan()?.tasks ?? null);
-    const [revisionCount, setRevisionCount] = useState(() => loadPlan()?.revisionCount ?? 0);
-    const [active, setActive] = useState<Task | null>(null);
+    const [saved] = useState(loadPlan);
+    const [goal, setGoal] = useState(saved?.goal ?? "");
+    const [tasks, setTasks] = useState<Task[] | null>(saved?.tasks ?? null);
+    const [revisionCount, setRevisionCount] = useState(saved?.revisionCount ?? 0);
+    const [activeId, setActiveId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [revising, setRevising] = useState(false);
     const [pendingRevision, setPendingRevision] = useState<Revision | null>(null);
+
+    // The task shown in the detail panel, always read from the current list.
+    const active = tasks?.find((t) => t.id === activeId) ?? null;
 
     useEffect(() => {
         if (tasks) {
@@ -25,15 +42,11 @@ function App() {
         }
     }, [goal, tasks, revisionCount]);
 
-    async function handleClick() {
+    async function handlePlan() {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch("/api/planner", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ goal })
-            });
+            const res = await postJson("/api/planner", { goal });
             if (!res.ok) throw new Error("request-failed");
             const data = await res.json();
             setTasks(parsePlan(data.result));
@@ -46,7 +59,6 @@ function App() {
 
     function handleMoveTask(id: number, col: ColumnKey) {
         setTasks((ts) => (ts ? ts.map((t) => (t.id === id ? { ...t, col } : t)) : ts));
-        setActive((a) => (a && a.id === id ? { ...a, col } : a));
     }
 
     function handleAddTask(title: string, description: string) {
@@ -55,12 +67,12 @@ function App() {
 
     function handleEditTask(id: number, updates: Omit<TaskUpdate, "id">) {
         setTasks((ts) => (ts ? ts.map((t) => (t.id === id ? { ...t, ...updates } : t)) : ts));
-        setActive((a) => (a && a.id === id ? { ...a, ...updates } : a));
     }
 
     function handleDeleteTask(id: number) {
         setTasks((ts) => (ts ? ts.filter((t) => t.id !== id) : ts));
-        setActive((a) => (a && a.id === id ? null : a));
+        // Clear the id too: a task added later can reuse it and must not reopen the panel.
+        setActiveId((a) => (a === id ? null : a));
     }
 
     async function handleRevise(instruction: string) {
@@ -71,11 +83,7 @@ function App() {
         setRevising(true);
         setError(null);
         try {
-            const res = await fetch("/api/revise", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ goal, tasks, instruction })
-            });
+            const res = await postJson("/api/revise", { goal, tasks, instruction });
             if (!res.ok) {
                 // A 400 explains itself (e.g. plan too big); other failures may not return JSON.
                 const body = await res.json().catch(() => null);
@@ -102,13 +110,9 @@ function App() {
         setPendingRevision(null);
     }
 
-    function handleDiscardRevision() {
-        setPendingRevision(null);
-    }
-
     function handleReset() {
         setTasks(null);
-        setActive(null);
+        setActiveId(null);
         setGoal("");
         setError(null);
         setRevisionCount(0);
@@ -117,31 +121,49 @@ function App() {
     }
 
     return (
-        <div>
-            <Landing
-                goal={goal}
-                setGoal={setGoal}
-                onPlan={handleClick}
-                loading={loading}
-                tasks={tasks}
-                onMoveTask={handleMoveTask}
-                active={active}
-                setActive={setActive}
-                error={error}
-                onReset={handleReset}
-                onAddTask={handleAddTask}
-                onEditTask={handleEditTask}
-                onDeleteTask={handleDeleteTask}
-                onRevise={handleRevise}
-                revising={revising}
-                revisionsUsed={revisionCount}
-                revisionsMax={MAX_REVISIONS}
-                pendingRevision={pendingRevision}
-                onApplyRevision={handleApplyRevision}
-                onDiscardRevision={handleDiscardRevision}
-            />
+        <>
+            <div className="flex min-h-screen flex-col">
+                <TopBar />
+
+                {loading ? (
+                    <PlanningLoader />
+                ) : !tasks ? (
+                    <GoalComposer goal={goal} setGoal={setGoal} onPlan={handlePlan} />
+                ) : (
+                    <Board
+                        goal={goal}
+                        tasks={tasks}
+                        onCardClick={(task) => setActiveId(task.id)}
+                        onMoveTask={handleMoveTask}
+                        onReset={handleReset}
+                        onAddTask={handleAddTask}
+                        onRevise={handleRevise}
+                        revising={revising}
+                        revisionsUsed={revisionCount}
+                        revisionsMax={MAX_REVISIONS}
+                    />
+                )}
+
+                <RevisePreviewDialog
+                    revision={pendingRevision}
+                    tasks={tasks ?? []}
+                    onApply={handleApplyRevision}
+                    onDiscard={() => setPendingRevision(null)}
+                />
+
+                <TaskDetailPanel
+                    key={active?.id}
+                    task={active}
+                    onClose={() => setActiveId(null)}
+                    onMove={handleMoveTask}
+                    onEdit={handleEditTask}
+                    onDelete={handleDeleteTask}
+                />
+
+                {error && <Toast>{error}</Toast>}
+            </div>
             <Analytics/>
-        </div>
+        </>
     );
 }
 

@@ -151,9 +151,9 @@ ai-agent/
 ├── index.html               # App shell + favicons
 ├── public/                  # Static assets served from / (favicons, manifest)
 └── src/
-    ├── App.tsx              # Top-level state, plan/revise logic, localStorage
+    ├── App.tsx              # Top-level state, plan/revise logic, goal input → board switch
     ├── components/
-    │   ├── Landing.tsx          # Goal input → board switch
+    │   ├── GoalComposer.tsx     # Goal input with example goals
     │   ├── Board.tsx            # Kanban board (drag & drop, collapsible columns)
     │   ├── PlanningLoader.tsx   # Loading state while planning
     │   ├── ReviseBar.tsx        # Natural-language revise input
@@ -162,6 +162,7 @@ ai-agent/
     │   ├── AddTaskForm.tsx
     │   └── ui/                  # Reusable UI primitives (core, forms, kanban, …)
     ├── lib/
+    │   ├── parseReply.ts        # Agent reply text → JSON (strips code fences)
     │   ├── parsePlan.ts         # Planner JSON → task cards
     │   ├── parseRevision.ts     # Revise JSON → change set
     │   ├── applyRevision.ts     # Apply add/update/remove to tasks

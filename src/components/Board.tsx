@@ -1,19 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { DragEvent } from "react";
-import type { ColumnKey, Revision, Task } from "../types";
+import { COLUMNS, type ColumnKey, type Task } from "../types";
 import KanbanColumn from "./ui/kanban/KanbanColumn";
 import TaskCard from "./ui/kanban/TaskCard";
 import Button from "./ui/core/Button";
 import Icon from "./ui/core/Icon";
 import AddTaskForm from "./AddTaskForm";
 import ReviseBar from "./ReviseBar";
-import RevisePreviewDialog from "./RevisePreviewDialog";
-
-const COLUMNS: { key: ColumnKey; title: string; tone: "neutral" | "progress" | "done" }[] = [
-    { key: "todo", title: "To Do", tone: "neutral" },
-    { key: "progress", title: "In Progress", tone: "progress" },
-    { key: "done", title: "Done", tone: "done" },
-];
 
 interface BoardProps {
     goal: string;
@@ -26,9 +19,6 @@ interface BoardProps {
     revising: boolean;
     revisionsUsed: number;
     revisionsMax: number;
-    pendingRevision: Revision | null;
-    onApplyRevision: () => void;
-    onDiscardRevision: () => void;
 }
 
 /** Board: goal header + revise bar + kanban columns for the generated plan. */
@@ -43,9 +33,6 @@ function Board({
     revising,
     revisionsUsed,
     revisionsMax,
-    pendingRevision,
-    onApplyRevision,
-    onDiscardRevision,
 }: BoardProps) {
     // Per-column collapse state (only takes effect below `md`; desktop always shows).
     // To Do starts open, the others collapsed.
@@ -67,7 +54,7 @@ function Board({
             let changed = false;
             const next = { ...prev };
             for (const col of COLUMNS) {
-                if (counts[col.key] > (prevCounts.current[col.key] ?? 0) && next[col.key]) {
+                if (counts[col.key] > prevCounts.current[col.key] && next[col.key]) {
                     next[col.key] = false;
                     changed = true;
                 }
@@ -129,17 +116,15 @@ function Board({
                         AI Planner Agent · {tasks.length} tasks
                     </div>
                 </div>
-                <div className="flex items-center gap-4">
-                    <Button
-                        variant="secondary"
-                        size="s"
-                        onClick={onReset}
-                        disabled={revising}
-                        icon={<Icon name="rotate-ccw" size={14} />}
-                    >
-                        Reset
-                    </Button>
-                </div>
+                <Button
+                    variant="secondary"
+                    size="s"
+                    onClick={onReset}
+                    disabled={revising}
+                    icon={<Icon name="rotate-ccw" size={14} />}
+                >
+                    Reset
+                </Button>
             </div>
 
             <ReviseBar
@@ -147,13 +132,6 @@ function Board({
                 loading={revising}
                 revisionsUsed={revisionsUsed}
                 revisionsMax={revisionsMax}
-            />
-
-            <RevisePreviewDialog
-                revision={pendingRevision}
-                tasks={tasks}
-                onApply={onApplyRevision}
-                onDiscard={onDiscardRevision}
             />
 
             {/* Drag hint — desktop only, since HTML5 drag doesn't fire on touch. */}
@@ -168,7 +146,7 @@ function Board({
                         key={col.key}
                         title={col.title}
                         count={counts[col.key]}
-                        tone={col.tone}
+                        tone={col.key}
                         collapsed={collapsed[col.key]}
                         onToggle={() => toggleColumn(col.key)}
                         dropActive={dragOverCol === col.key}
@@ -182,7 +160,7 @@ function Board({
                                 <TaskCard
                                     key={task.id}
                                     title={task.title}
-                                    statusTone={col.tone}
+                                    statusTone={col.key}
                                     statusLabel={col.title}
                                     onClick={() => onCardClick(task)}
                                     dragging={draggingId === task.id}
