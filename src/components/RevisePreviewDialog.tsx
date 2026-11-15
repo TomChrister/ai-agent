@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Revision, Task } from "../types";
 import Dialog from "./ui/overlays/Dialog";
 import Button from "./ui/core/Button";
@@ -7,6 +8,30 @@ interface RevisePreviewDialogProps {
     tasks: Task[];
     onApply: () => void;
     onDiscard: () => void;
+}
+
+interface ChangeRowProps {
+    badge: string;
+    badgeClass: string;
+    title: ReactNode;
+    description?: string;
+    /** Indent that lines the description up under the title (the badges differ in width). */
+    descriptionClass: string;
+}
+
+/** ChangeRow: one proposed change — a coloured badge, the task title and an optional description. */
+function ChangeRow({ badge, badgeClass, title, description, descriptionClass }: ChangeRowProps) {
+    return (
+        <div className="flex flex-col gap-1 text-sm">
+            <div className="flex items-start gap-2">
+                <span className={`mt-0.5 shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${badgeClass}`}>
+                    {badge}
+                </span>
+                <span className="text-(--text-primary)">{title}</span>
+            </div>
+            {description && <p className={`text-xs text-(--text-secondary) ${descriptionClass}`}>{description}</p>}
+        </div>
+    );
 }
 
 /** RevisePreviewDialog: shows the Revise Agent's proposed add/update/remove diff before it's applied. */
@@ -40,50 +65,41 @@ function RevisePreviewDialog({ revision, tasks, onApply, onDiscard }: RevisePrev
         >
             <div className="flex max-h-80 flex-col gap-3 overflow-y-auto">
                 {revision.add.map((t, i) => (
-                    <div key={`add-${i}`} className="flex flex-col gap-1 text-sm">
-                        <div className="flex items-start gap-2">
-                            <span className="mt-0.5 shrink-0 rounded-full bg-(--status-done-bg) px-2 py-0.5 text-[11px] font-medium text-(--text-primary)">
-                                + Add
-                            </span>
-                            <span className="text-(--text-primary)">{t.title}</span>
-                        </div>
-                        {t.description && (
-                            <p className="pl-[52px] text-xs text-(--text-secondary)">{t.description}</p>
-                        )}
-                    </div>
+                    <ChangeRow
+                        key={`add-${i}`}
+                        badge="+ Add"
+                        badgeClass="bg-(--status-done-bg) text-(--text-primary)"
+                        title={t.title}
+                        description={t.description}
+                        descriptionClass="pl-[52px]"
+                    />
                 ))}
 
                 {revision.update.map((t) => (
-                    <div key={`update-${t.id}`} className="flex flex-col gap-1 text-sm">
-                        <div className="flex items-start gap-2">
-                            <span className="mt-0.5 shrink-0 rounded-full bg-(--surface-sunken) px-2 py-0.5 text-[11px] font-medium text-(--text-primary)">
-                                ~ Update
-                            </span>
-                            <span className="text-(--text-primary)">
+                    <ChangeRow
+                        key={`update-${t.id}`}
+                        badge="~ Update"
+                        badgeClass="bg-(--surface-sunken) text-(--text-primary)"
+                        title={
+                            <>
                                 {findTitle(t.id)}
                                 {t.title && t.title !== findTitle(t.id) && <> → {t.title}</>}
-                            </span>
-                        </div>
-                        {t.description && (
-                            <p className="pl-[68px] text-xs text-(--text-secondary)">{t.description}</p>
-                        )}
-                    </div>
+                            </>
+                        }
+                        description={t.description}
+                        descriptionClass="pl-[68px]"
+                    />
                 ))}
 
                 {revision.remove.map((id) => (
-                    <div key={`remove-${id}`} className="flex flex-col gap-1 text-sm">
-                        <div className="flex items-start gap-2">
-                            <span className="mt-0.5 shrink-0 rounded-full bg-(--danger-bg) px-2 py-0.5 text-[11px] font-medium text-(--danger)">
-                                − Remove
-                            </span>
-                            <span className="text-(--text-primary)">{findTitle(id)}</span>
-                        </div>
-                        {findTask(id)?.description && (
-                            <p className="pl-[68px] text-xs text-(--text-secondary) line-through">
-                                {findTask(id)!.description}
-                            </p>
-                        )}
-                    </div>
+                    <ChangeRow
+                        key={`remove-${id}`}
+                        badge="− Remove"
+                        badgeClass="bg-(--danger-bg) text-(--danger)"
+                        title={findTitle(id)}
+                        description={findTask(id)?.description}
+                        descriptionClass="pl-[68px] line-through"
+                    />
                 ))}
 
                 {changeCount === 0 && (

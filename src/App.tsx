@@ -15,10 +15,18 @@ import { Analytics } from "@vercel/analytics/react"
 
 const MAX_REVISIONS = 5;
 
+const postJson = (url: string, body: unknown) =>
+    fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    });
+
 function App() {
-    const [goal, setGoal] = useState(() => loadPlan()?.goal ?? "");
-    const [tasks, setTasks] = useState<Task[] | null>(() => loadPlan()?.tasks ?? null);
-    const [revisionCount, setRevisionCount] = useState(() => loadPlan()?.revisionCount ?? 0);
+    const [saved] = useState(loadPlan);
+    const [goal, setGoal] = useState(saved?.goal ?? "");
+    const [tasks, setTasks] = useState<Task[] | null>(saved?.tasks ?? null);
+    const [revisionCount, setRevisionCount] = useState(saved?.revisionCount ?? 0);
     const [activeId, setActiveId] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -34,15 +42,11 @@ function App() {
         }
     }, [goal, tasks, revisionCount]);
 
-    async function handleClick() {
+    async function handlePlan() {
         setLoading(true);
         setError(null);
         try {
-            const res = await fetch("/api/planner", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ goal })
-            });
+            const res = await postJson("/api/planner", { goal });
             if (!res.ok) throw new Error("request-failed");
             const data = await res.json();
             setTasks(parsePlan(data.result));
@@ -79,11 +83,7 @@ function App() {
         setRevising(true);
         setError(null);
         try {
-            const res = await fetch("/api/revise", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ goal, tasks, instruction })
-            });
+            const res = await postJson("/api/revise", { goal, tasks, instruction });
             if (!res.ok) {
                 // A 400 explains itself (e.g. plan too big); other failures may not return JSON.
                 const body = await res.json().catch(() => null);
@@ -128,7 +128,7 @@ function App() {
                 {loading ? (
                     <PlanningLoader />
                 ) : !tasks ? (
-                    <GoalComposer goal={goal} setGoal={setGoal} onPlan={handleClick} />
+                    <GoalComposer goal={goal} setGoal={setGoal} onPlan={handlePlan} />
                 ) : (
                     <Board
                         goal={goal}
