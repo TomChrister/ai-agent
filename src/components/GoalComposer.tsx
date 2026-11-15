@@ -13,8 +13,9 @@ interface GoalComposerProps {
 function GoalComposer({ goal, setGoal, onPlan }: GoalComposerProps) {
     return (
         <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 py-20 text-center">
-            <h1 className="m-0 max-w-3xl text-[40px] md:text-[60px] font-normal tracking-(--tracking-display) leading-[1.13] text-(--text-strong)">
-                Turn any goal into a plan, instantly.
+            <h1 className="m-0 max-w-3xl text-[40px] md:text-[64px] font-light tracking-(--tracking-display) leading-[1.15] text-(--text-strong)">
+                Turn any goal into a plan,{" "}
+                <span className="bg-(image:--gradient-apricot) bg-clip-text font-normal text-transparent">instantly.</span>
             </h1>
             <p className="max-w-md text-base text-(--text-secondary)">
                 Describe what you want to achieve — our AI Planner breaks it into tasks on a kanban board.
@@ -30,16 +31,17 @@ function GoalComposer({ goal, setGoal, onPlan }: GoalComposerProps) {
                     className="flex-1 border-none bg-transparent text-base text-(--text-primary) outline-none"
                 />
                 <Button
-                    variant="primary"
+                    variant="dark"
                     onClick={onPlan}
                     disabled={!goal.trim()}
-                    iconRight={<Icon name="arrow-right" size={16} />}
+                    // Icons are black <img>s: invert to white on the dark button.
+                    iconRight={<Icon name="arrow-right" size={16} className="brightness-0 invert" />}
                 >
                     Plan it
                 </Button>
             </div>
 
-            <p className="text-[10px] font-medium uppercase tracking-(--tracking-label) text-(--text-muted)">
+            <p className="text-xs font-medium uppercase tracking-(--tracking-label) text-(--text-muted)">
                 This chat uses Claude Sonnet 4.6
             </p>
 

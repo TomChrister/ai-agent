@@ -108,12 +108,13 @@ function Board({
     }
 
     return (
-        <div className="flex flex-1 flex-col">
-            <div className="flex items-center justify-between px-8 pt-5">
-                <div>
-                    <div className="text-[25px] font-medium leading-[1.4] tracking-[-0.01em] text-(--text-strong)">{goal}</div>
+        // 1264px = the TopBar's 1200px content width plus this layout's 32px side padding.
+        <div className="mx-auto flex w-full max-w-[1264px] flex-1 flex-col">
+            <div className="flex items-start justify-between gap-4 px-4 pt-6 md:px-8">
+                <div className="min-w-0">
+                    <h1 className="text-2xl leading-[1.3] tracking-[-0.015em] wrap-break-word">{goal}</h1>
                     <div className="mt-1 text-sm text-(--text-secondary)">
-                        AI Planner Agent · {tasks.length} tasks
+                        AI Planner Agent · {counts.done} of {tasks.length} tasks done
                     </div>
                 </div>
                 <Button
@@ -141,7 +142,9 @@ function Board({
             </span>
 
             <div className="flex flex-1 flex-col gap-4 p-4 pt-3 md:flex-row md:gap-5 md:overflow-x-auto md:p-8 md:pt-4">
-                {COLUMNS.map((col) => (
+                {COLUMNS.map((col, i) => {
+                    const next = COLUMNS[i + 1];
+                    return (
                     <KanbanColumn
                         key={col.key}
                         title={col.title}
@@ -160,9 +163,10 @@ function Board({
                                 <TaskCard
                                     key={task.id}
                                     title={task.title}
-                                    statusTone={col.key}
-                                    statusLabel={col.title}
+                                    description={task.description}
                                     onClick={() => onCardClick(task)}
+                                    advanceLabel={next?.title}
+                                    onAdvance={next && (() => onMoveTask(task.id, next.key))}
                                     dragging={draggingId === task.id}
                                     onDragStart={(e) => handleDragStart(e, task)}
                                     onDragEnd={handleDragEnd}
@@ -170,7 +174,8 @@ function Board({
                             ))}
                         {col.key === "todo" && <AddTaskForm onAdd={onAddTask} />}
                     </KanbanColumn>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap');
 @import "tailwindcss";
 @import "./styles/tokens.css";
 
 body {
   margin: 0;
-  font-family: var(--font-inter);
+  font-family: var(--font-poppins);
   color: var(--text-primary);
-  /* Dawn Wash: atmospheric light at the very top of the page only */
-  background: var(--gradient-dawn) no-repeat, var(--surface-page);
+  background: var(--surface-page);
   font-size: var(--text-body-m);
   line-height: var(--leading-body);
+  letter-spacing: var(--tracking-body);
   -webkit-font-smoothing: antialiased;
 }
 
@@ -21,9 +21,8 @@ body {
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-inter);
+  font-family: var(--font-poppins);
   font-weight: 500;
-  letter-spacing: -0.01em;
   margin: 0;
   color: var(--text-strong);
 }
