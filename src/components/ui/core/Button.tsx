@@ -8,6 +8,8 @@ const SIZE_STYLES = {
 const VARIANT_STYLES = {
     primary:
         "border border-transparent bg-(--accent-primary) text-(--text-on-accent) hover:bg-(--accent-primary-hover) disabled:bg-(--border-default) disabled:text-(--text-muted)",
+    dark:
+        "border border-transparent bg-(--text-strong) text-(--text-on-accent) hover:bg-black disabled:bg-(--border-default) disabled:text-(--text-muted)",
     secondary:
         "border border-(--border-strong) bg-transparent text-(--text-primary) hover:bg-(--surface-sunken)",
     danger:
@@ -21,7 +23,7 @@ interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
     iconRight?: ReactNode;
 }
 
-/** Button: green filled primary CTA, outline secondary/danger pills, two sizes. */
+/** Button: violet filled primary CTA, dark filled CTA for the landing page, outline secondary/danger pills, two sizes. */
 function Button({ variant = "primary", size = "m", icon, iconRight, children, className = "", ...rest }: ButtonProps) {
     return (
         <button

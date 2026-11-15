@@ -22,7 +22,7 @@ function ReviseBar({ onSubmit, loading, revisionsUsed, revisionsMax }: ReviseBar
     }
 
     return (
-        <div className="flex items-center gap-2 px-8 py-5">
+        <div className="flex flex-wrap items-center gap-2 px-4 py-5 md:px-8">
             <input
                 value={value}
                 maxLength={500}
@@ -34,7 +34,7 @@ function ReviseBar({ onSubmit, loading, revisionsUsed, revisionsMax }: ReviseBar
                         ? "No revisions left"
                         : 'Ask Claude to adjust the plan — e.g. "add two tasks about music" or "focus more on the venue"'
                 }
-                className="w-full max-w-md rounded-(--radius-inputs) border border-(--border-default) bg-(--surface-card) px-4 py-2 text-sm text-(--text-primary) outline-none transition duration-150 focus:border-(--focus-ring) disabled:opacity-60"
+                className="min-w-0 flex-1 basis-60 md:max-w-xl rounded-(--radius-inputs) border border-(--border-default) bg-(--surface-card) px-4 py-2 text-sm text-(--text-primary) outline-none transition duration-150 focus:border-(--focus-ring) disabled:opacity-60"
             />
             <Button
                 variant="secondary"

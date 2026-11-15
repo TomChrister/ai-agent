@@ -53,7 +53,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
     return (
         <div
             ref={panelRef}
-            className="fixed inset-y-0 right-0 z-60 flex w-95 flex-col gap-4 overflow-y-auto bg-(--surface-card) p-6 shadow-(--shadow-xl)"
+            className="fixed inset-y-0 right-0 z-60 flex w-95 max-w-full flex-col gap-4 overflow-y-auto bg-(--surface-card) p-6 shadow-(--shadow-xl)"
         >
             <div className="flex items-start justify-between gap-2">
                 {isEditing ? (
@@ -67,19 +67,19 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                 ) : (
                     <div className="max-w-65 text-xl font-medium text-(--text-strong)">{task.title}</div>
                 )}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-0.5">
                     {!isEditing && (
                         <>
                             <button
                                 onClick={startEditing}
-                                className="cursor-pointer border-none bg-transparent p-0 text-(--text-secondary)"
+                                className="flex cursor-pointer rounded-full border-none bg-transparent p-1.5 hover:bg-(--surface-sunken)"
                                 aria-label="Edit task"
                             >
                                 <Icon name="pencil" size={16} />
                             </button>
                             <button
                                 onClick={() => setConfirmingDelete(true)}
-                                className="cursor-pointer border-none bg-transparent p-0 text-(--text-secondary) hover:text-(--danger)"
+                                className="flex cursor-pointer rounded-full border-none bg-transparent p-1.5 hover:bg-(--danger-bg)"
                                 aria-label="Delete task"
                             >
                                 <Icon name="trash-2" size={16} />
@@ -88,7 +88,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
                     )}
                     <button
                         onClick={onClose}
-                        className="cursor-pointer border-none bg-transparent p-0 text-(--text-secondary)"
+                        className="flex cursor-pointer rounded-full border-none bg-transparent p-1.5 hover:bg-(--surface-sunken)"
                         aria-label="Close"
                     >
                         <Icon name="x" size={18} />
@@ -129,7 +129,7 @@ function TaskDetailPanel({ task, onClose, onMove, onEdit, onDelete }: TaskDetail
             )}
 
             <div>
-                <div className="mb-2.5 text-[10px] font-medium uppercase tracking-(--tracking-label) text-(--text-muted)">
+                <div className="mb-2.5 text-xs font-medium uppercase tracking-(--tracking-label) text-(--text-muted)">
                     Status
                 </div>
                 <div className="flex flex-wrap gap-2">
